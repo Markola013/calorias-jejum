@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useForm } from 'react-hook-form';
@@ -143,9 +144,17 @@ export default function WeightPage() {
       <div className="space-y-5 animate-in fade-in slide-in-from-bottom-5 duration-500 pb-12">
         
         {/* Title */}
-        <div>
-          <h1 className="text-xl font-black text-white tracking-tight">Progresso de Peso</h1>
-          <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider mt-0.5">Controle de peso corporal</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-black text-white tracking-tight">Progresso de Peso</h1>
+            <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider mt-0.5">Controle de peso corporal</p>
+          </div>
+          <Link href="/analytics">
+            <Button size="sm" variant="outline" className="border-zinc-800 bg-zinc-950/40 hover:bg-zinc-900 text-purple-400 border-purple-500/20 font-bold rounded-xl flex items-center">
+              <TrendingUp className="h-4 w-4 mr-1.5" />
+              Gráficos
+            </Button>
+          </Link>
         </div>
 
         {/* ======================================================== */}
