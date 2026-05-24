@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 import { useAuth } from '@/context/AuthContext';
-import { Flame, Utensils, Clock, Droplet, Scale, LogOut, User } from 'lucide-react';
+import { Flame, Utensils, Clock, Droplet, Scale, LogOut, User, Sun, Moon } from 'lucide-react';
 
 interface MobileShellProps {
   children: React.ReactNode;
@@ -14,6 +15,12 @@ export default function MobileShell({ children }: MobileShellProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -55,9 +62,25 @@ export default function MobileShell({ children }: MobileShellProps) {
           </div>
 
           <div className="flex items-center space-x-2">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-2 rounded-lg bg-zinc-900/60 hover:bg-zinc-850 hover:text-zinc-200 text-zinc-400 transition-all duration-200"
+              title="Alterar Tema"
+            >
+              {!mounted ? (
+                <div className="h-4 w-4" />
+              ) : theme === 'dark' ? (
+                <Sun className="h-4 w-4 text-amber-400" />
+              ) : (
+                <Moon className="h-4 w-4 text-indigo-400" />
+              )}
+            </button>
+
+            {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className="p-2 rounded-lg bg-zinc-900 hover:bg-zinc-850 hover:text-red-400 text-zinc-400 transition-all duration-200"
+              className="p-2 rounded-lg bg-zinc-900/60 hover:bg-zinc-850 hover:text-red-400 text-zinc-400 transition-all duration-200"
               title="Sair"
             >
               <LogOut className="h-4 w-4" />
