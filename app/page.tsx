@@ -172,220 +172,235 @@ export default function DashboardPage() {
           {displayDate}
         </div>
 
-        {/* 1. Main Calorie Visual Ring Card */}
-        <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl relative overflow-hidden">
-          <CardContent className="pt-6 flex flex-col items-center">
+        {/* Responsive Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 items-start">
+          
+          {/* Main Content Column (2/3 width on desktop) */}
+          <div className="space-y-5 md:col-span-2 md:space-y-6">
             
-            {/* SVG Progress Ring */}
-            <div className="relative h-44 w-44 flex items-center justify-center">
-              <svg className="h-full w-full -rotate-90">
-                {/* Background Ring Track */}
-                <circle
-                  className="text-zinc-850 stroke-current"
-                  strokeWidth="8"
-                  cx="88"
-                  cy="88"
-                  r={strokeRadius}
-                  fill="transparent"
-                />
-                {/* Front Progress Ring */}
-                <circle
-                  className="stroke-calorie transition-all duration-500 ease-out"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={strokeCircumference}
-                  strokeDashoffset={strokeDashoffset}
-                  cx="88"
-                  cy="88"
-                  r={strokeRadius}
-                  fill="transparent"
-                />
-              </svg>
+            {/* 1. Main Calorie Visual Ring Card */}
+            <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl relative overflow-hidden">
+              <CardContent className="pt-6 flex flex-col items-center">
+                
+                {/* SVG Progress Ring */}
+                <div className="relative h-44 w-44 flex items-center justify-center">
+                  <svg className="h-full w-full -rotate-90">
+                    {/* Background Ring Track */}
+                    <circle
+                      className="text-zinc-850 stroke-current"
+                      strokeWidth="8"
+                      cx="88"
+                      cy="88"
+                      r={strokeRadius}
+                      fill="transparent"
+                    />
+                    {/* Front Progress Ring */}
+                    <circle
+                      className="stroke-calorie transition-all duration-500 ease-out"
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      strokeDasharray={strokeCircumference}
+                      strokeDashoffset={strokeDashoffset}
+                      cx="88"
+                      cy="88"
+                      r={strokeRadius}
+                      fill="transparent"
+                    />
+                  </svg>
 
-              {/* Inside Ring Metrics */}
-              <div className="absolute text-center flex flex-col justify-center items-center">
-                <Flame className="h-5 w-5 text-calorie animate-pulse mb-0.5" />
-                <span className="text-3xl font-black text-white tracking-tighter">
-                  {consumedCalories}
-                </span>
-                <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                  kcal consumidas
-                </span>
-              </div>
-            </div>
-
-            {/* Bottom target details */}
-            <div className="w-full grid grid-cols-2 gap-4 border-t border-zinc-800/60 pt-4 mt-2 text-center">
-              <div>
-                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Meta Diária</p>
-                <p className="text-lg font-bold text-zinc-200">{calorieTarget} kcal</p>
-              </div>
-              <div className="border-l border-zinc-800/60">
-                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Restantes</p>
-                <p className={`text-lg font-extrabold ${remainingCalories >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                  {remainingCalories} kcal
-                </p>
-              </div>
-            </div>
-
-          </CardContent>
-        </Card>
-
-        {/* 2. Macronutrients Progress Segment */}
-        <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
-          <CardContent className="py-4 space-y-3.5">
-            <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-widest flex items-center">
-              <Utensils className="h-4 w-4 text-orange-400 mr-2" />
-              Macronutrientes
-            </h3>
-
-            {/* Carbs */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-semibold">
-                <span className="text-zinc-300">Carboidratos</span>
-                <span className="text-zinc-500">
-                  <strong className="text-zinc-200">{consumedCarbs}g</strong> / {targetCarbs}g
-                </span>
-              </div>
-              <div className="h-2 w-full bg-zinc-850 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-emerald-500 rounded-full transition-all duration-500" 
-                  style={{ width: `${Math.min(100, (consumedCarbs / targetCarbs) * 100)}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Protein */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-semibold">
-                <span className="text-zinc-300">Proteínas</span>
-                <span className="text-zinc-500">
-                  <strong className="text-zinc-200">{consumedProtein}g</strong> / {targetProtein}g
-                </span>
-              </div>
-              <div className="h-2 w-full bg-zinc-850 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-orange-500 rounded-full transition-all duration-500" 
-                  style={{ width: `${Math.min(100, (consumedProtein / targetProtein) * 100)}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Fat */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-semibold">
-                <span className="text-zinc-300">Gorduras</span>
-                <span className="text-zinc-500">
-                  <strong className="text-zinc-200">{consumedFat}g</strong> / {targetFat}g
-                </span>
-              </div>
-              <div className="h-2 w-full bg-zinc-850 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-blue-400 rounded-full transition-all duration-500" 
-                  style={{ width: `${Math.min(100, (consumedFat / targetFat) * 100)}%` }}
-                />
-              </div>
-            </div>
-
-          </CardContent>
-        </Card>
-
-        {/* 3. Fasting Active Widget */}
-        <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
-          <CardContent className="py-4 flex items-center justify-between">
-            <div className="flex items-center space-x-3.5">
-              <div className={`p-2.5 rounded-xl ${activeFast ? 'bg-emerald-500/10 text-emerald-400 animate-pulse' : 'bg-zinc-800/50 text-zinc-500'}`}>
-                <Clock className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Cronômetro de Jejum</p>
-                {activeFast ? (
-                  <p className="text-xl font-black text-white mt-0.5 tracking-tighter">
-                    {fastingElapsed || '00:00:00'}
-                  </p>
-                ) : (
-                  <p className="text-sm font-semibold text-zinc-500 mt-0.5">Sem jejum ativo no momento</p>
-                )}
-              </div>
-            </div>
-
-            <Link href="/fasting">
-              <Button size="icon" variant="ghost" className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10">
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        {/* 4. Interactive Water logging widget */}
-        <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
-          <CardContent className="py-4 flex items-center justify-between">
-            <div className="flex items-center space-x-3.5">
-              <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400">
-                <Droplet className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Registro de Água</p>
-                <p className="text-xl font-black text-white mt-0.5 tracking-tighter">
-                  {consumedWater} <span className="text-xs font-normal text-zinc-500">/ {waterTarget} ml</span>
-                </p>
-              </div>
-            </div>
-
-            <Button
-              onClick={handleQuickWater}
-              disabled={quickWaterLoading}
-              className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 rounded-xl font-bold flex items-center space-x-1"
-            >
-              {quickWaterLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Plus className="h-4 w-4" />
-              )}
-              <span>+250ml</span>
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* 5. Weight summary card */}
-        <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
-          <CardContent className="py-4">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-3">
-                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400">
-                  <Scale className="h-5 w-5" />
+                  {/* Inside Ring Metrics */}
+                  <div className="absolute text-center flex flex-col justify-center items-center">
+                    <Flame className="h-5 w-5 text-calorie animate-pulse mb-0.5" />
+                    <span className="text-3xl font-black text-white tracking-tighter">
+                      {consumedCalories}
+                    </span>
+                    <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                      kcal consumidas
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Peso Corporal</p>
-                  <p className="text-xl font-black text-white mt-0.5 tracking-tighter">
-                    {currentWeight} <span className="text-xs font-normal text-zinc-500">kg</span>
-                  </p>
+
+                {/* Bottom target details */}
+                <div className="w-full grid grid-cols-2 gap-4 border-t border-zinc-800/60 pt-4 mt-2 text-center">
+                  <div>
+                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Meta Diária</p>
+                    <p className="text-lg font-bold text-zinc-200">{calorieTarget} kcal</p>
+                  </div>
+                  <div className="border-l border-zinc-800/60">
+                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Restantes</p>
+                    <p className={`text-lg font-extrabold ${remainingCalories >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {remainingCalories} kcal
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <Link href="/weight">
-                <Button size="icon" variant="ghost" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10">
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
+              </CardContent>
+            </Card>
 
-            {/* Target comparison calculation */}
-            {currentWeight !== targetWeight && (
-              <div className="flex items-center text-xs text-zinc-400 bg-zinc-950/40 border border-zinc-850 rounded-xl px-3 py-2 space-x-2">
-                <TrendingDown className="h-4 w-4 text-purple-400 shrink-0" />
-                <span>
-                  Seu peso alvo é de <strong>{targetWeight} kg</strong>.{' '}
-                  {currentWeight > targetWeight ? (
-                    <>Faltam <strong>{(currentWeight - targetWeight).toFixed(1)} kg</strong> para sua meta.</>
+            {/* 2. Macronutrients Progress Segment */}
+            <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
+              <CardContent className="py-4 space-y-3.5">
+                <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-widest flex items-center">
+                  <Utensils className="h-4 w-4 text-orange-400 mr-2" />
+                  Macronutrientes
+                </h3>
+
+                {/* Carbs */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-xs font-semibold">
+                    <span className="text-zinc-300">Carboidratos</span>
+                    <span className="text-zinc-500">
+                      <strong className="text-zinc-200">{consumedCarbs}g</strong> / {targetCarbs}g
+                    </span>
+                  </div>
+                  <div className="h-2 w-full bg-zinc-850 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-emerald-500 rounded-full transition-all duration-500" 
+                      style={{ width: `${Math.min(100, (consumedCarbs / targetCarbs) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Protein */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-xs font-semibold">
+                    <span className="text-zinc-300">Proteínas</span>
+                    <span className="text-zinc-500">
+                      <strong className="text-zinc-200">{consumedProtein}g</strong> / {targetProtein}g
+                    </span>
+                  </div>
+                  <div className="h-2 w-full bg-zinc-850 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-orange-500 rounded-full transition-all duration-500" 
+                      style={{ width: `${Math.min(100, (consumedProtein / targetProtein) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Fat */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between text-xs font-semibold">
+                    <span className="text-zinc-300">Gorduras</span>
+                    <span className="text-zinc-500">
+                      <strong className="text-zinc-200">{consumedFat}g</strong> / {targetFat}g
+                    </span>
+                  </div>
+                  <div className="h-2 w-full bg-zinc-850 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-blue-400 rounded-full transition-all duration-500" 
+                      style={{ width: `${Math.min(100, (consumedFat / targetFat) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+
+              </CardContent>
+            </Card>
+
+          </div>
+
+          {/* Right Sidebar Widgets Column (1/3 width on desktop) */}
+          <div className="space-y-5 md:space-y-6">
+            
+            {/* 3. Fasting Active Widget */}
+            <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
+              <CardContent className="py-4 flex items-center justify-between">
+                <div className="flex items-center space-x-3.5">
+                  <div className={`p-2.5 rounded-xl ${activeFast ? 'bg-emerald-500/10 text-emerald-400 animate-pulse' : 'bg-zinc-800/50 text-zinc-500'}`}>
+                    <Clock className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Cronômetro de Jejum</p>
+                    {activeFast ? (
+                      <p className="text-xl font-black text-white mt-0.5 tracking-tighter">
+                        {fastingElapsed || '00:00:00'}
+                      </p>
+                    ) : (
+                      <p className="text-sm font-semibold text-zinc-500 mt-0.5">Sem jejum ativo no momento</p>
+                    )}
+                  </div>
+                </div>
+
+                <Link href="/fasting">
+                  <Button size="icon" variant="ghost" className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10">
+                    <ArrowRight className="h-5 w-5" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* 4. Interactive Water logging widget */}
+            <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
+              <CardContent className="py-4 flex items-center justify-between">
+                <div className="flex items-center space-x-3.5">
+                  <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400">
+                    <Droplet className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Registro de Água</p>
+                    <p className="text-xl font-black text-white mt-0.5 tracking-tighter">
+                      {consumedWater} <span className="text-xs font-normal text-zinc-500">/ {waterTarget} ml</span>
+                    </p>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={handleQuickWater}
+                  disabled={quickWaterLoading}
+                  className="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 rounded-xl font-bold flex items-center space-x-1"
+                >
+                  {quickWaterLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <>Faltam <strong>{(targetWeight - currentWeight).toFixed(1)} kg</strong> para sua meta.</>
+                    <Plus className="h-4 w-4" />
                   )}
-                </span>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                  <span>+250ml</span>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* 5. Weight summary card */}
+            <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
+              <CardContent className="py-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400">
+                      <Scale className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Peso Corporal</p>
+                      <p className="text-xl font-black text-white mt-0.5 tracking-tighter">
+                        {currentWeight} <span className="text-xs font-normal text-zinc-500">kg</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <Link href="/weight">
+                    <Button size="icon" variant="ghost" className="text-purple-400 hover:text-purple-300 hover:bg-purple-500/10">
+                      <ArrowRight className="h-5 w-5" />
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Target comparison calculation */}
+                {currentWeight !== targetWeight && (
+                  <div className="flex items-center text-xs text-zinc-400 bg-zinc-950/40 border border-zinc-850 rounded-xl px-3 py-2 space-x-2">
+                    <TrendingDown className="h-4 w-4 text-purple-400 shrink-0" />
+                    <span>
+                      Seu peso alvo é de <strong>{targetWeight} kg</strong>.{' '}
+                      {currentWeight > targetWeight ? (
+                        <>Faltam <strong>{(currentWeight - targetWeight).toFixed(1)} kg</strong> para sua meta.</>
+                      ) : (
+                        <>Faltam <strong>{(targetWeight - currentWeight).toFixed(1)} kg</strong> para sua meta.</>
+                      )}
+                    </span>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+          </div>
+
+        </div>
 
       </div>
     </MobileShell>

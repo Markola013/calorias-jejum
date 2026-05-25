@@ -308,99 +308,104 @@ export default function MealsPage() {
               </form>
             </DialogContent>
           </Dialog>
-        </div>
-
-        {/* 1. Daily Total Nutrients Summary Card */}
-        <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
-          <CardContent className="py-4">
-            <div className="flex items-center justify-between border-b border-zinc-800/60 pb-3 mb-3">
-              <div className="flex items-center space-x-2">
-                <Flame className="h-5 w-5 text-orange-400" />
-                <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Total Consumido Hoje</span>
-              </div>
-              <p className="text-xl font-black text-white">{totalCalories} <span className="text-xs font-normal text-zinc-500">kcal</span></p>
-            </div>
-
-            <div className="grid grid-cols-3 gap-2 text-center text-xs font-semibold">
-              <div className="p-2 rounded-xl bg-zinc-950/30 border border-zinc-850">
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold mb-0.5">Carboidratos</p>
-                <p className="text-zinc-200">{totalCarbs}g</p>
-              </div>
-              <div className="p-2 rounded-xl bg-zinc-950/30 border border-zinc-850">
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold mb-0.5">Proteínas</p>
-                <p className="text-zinc-200">{totalProtein}g</p>
-              </div>
-              <div className="p-2 rounded-xl bg-zinc-950/30 border border-zinc-850">
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold mb-0.5">Gorduras</p>
-                <p className="text-zinc-200">{totalFat}g</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 2. Categorized Meals Feed */}
-        <div className="space-y-4">
-          {categories.map((cat) => {
-            const CatIcon = cat.icon;
-            const catMeals = groupedMeals(cat.key);
-            const catCals = categoryCalories(cat.key);
-
-            return (
-              <div key={cat.key} className="space-y-2">
-                {/* Category Header */}
-                <div className="flex items-center justify-between px-1">
+        {/* Responsive Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 items-start">
+          
+          {/* Left Column: Nutrients Summary (1/3 width on desktop) */}
+          <div className="md:col-span-1 md:sticky md:top-20">
+            {/* 1. Daily Total Nutrients Summary Card */}
+            <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
+              <CardContent className="py-4">
+                <div className="flex items-center justify-between border-b border-zinc-800/60 pb-3 mb-3">
                   <div className="flex items-center space-x-2">
-                    <CatIcon className={`h-4 w-4 ${cat.color}`} />
-                    <h2 className="text-sm font-bold text-zinc-200">{cat.label}</h2>
+                    <Flame className="h-5 w-5 text-orange-400" />
+                    <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Total Hoje</span>
                   </div>
-                  <span className="text-xs font-bold text-zinc-500 bg-zinc-900 border border-zinc-850 px-2.5 py-0.5 rounded-full">
-                    {catCals} kcal
-                  </span>
+                  <p className="text-xl font-black text-white">{totalCalories} <span className="text-xs font-normal text-zinc-500">kcal</span></p>
                 </div>
 
-                {/* Meals List */}
-                <div className="space-y-2">
-                  {catMeals.length > 0 ? (
-                    catMeals.map((meal) => (
-                      <Card key={meal.id} className="border-zinc-800 bg-zinc-900/20 backdrop-blur-sm group hover:border-zinc-700 transition-all duration-300">
-                        <CardContent className="p-3 flex items-center justify-between">
-                          <div className="space-y-1">
-                            <p className="text-sm font-semibold text-zinc-100">{meal.name}</p>
-                            <p className="text-[10px] text-zinc-500 font-medium">
-                              C: {meal.carbs}g · P: {meal.protein}g · G: {meal.fat}g
-                            </p>
-                          </div>
+                <div className="grid grid-cols-3 gap-2 text-center text-xs font-semibold md:grid-cols-1 md:gap-3 md:text-left">
+                  <div className="p-2.5 rounded-xl bg-zinc-950/30 border border-zinc-850 md:flex md:items-center md:justify-between md:py-3">
+                    <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold mb-0.5 md:mb-0">Carboidratos</p>
+                    <p className="text-zinc-200 md:font-bold">{totalCarbs}g</p>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-zinc-950/30 border border-zinc-850 md:flex md:items-center md:justify-between md:py-3">
+                    <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold mb-0.5 md:mb-0">Proteínas</p>
+                    <p className="text-zinc-200 md:font-bold">{totalProtein}g</p>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-zinc-950/30 border border-zinc-850 md:flex md:items-center md:justify-between md:py-3">
+                    <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold mb-0.5 md:mb-0">Gorduras</p>
+                    <p className="text-zinc-200 md:font-bold">{totalFat}g</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-                          <div className="flex items-center space-x-3.5">
-                            <span className="text-sm font-black text-white">{meal.calories} kcal</span>
-                            
-                            <button
-                              onClick={() => handleDeleteMeal(meal.id)}
-                              disabled={deletingId === meal.id}
-                              className="text-zinc-600 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-all duration-200"
-                              title="Remover alimento"
-                            >
-                              {deletingId === meal.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin text-red-400" />
-                              ) : (
-                                <Trash2 className="h-4 w-4" />
-                              )}
-                            </button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))
-                  ) : (
-                    <div className="text-center py-6 border border-dashed border-zinc-850 bg-zinc-950/10 rounded-2xl">
-                      <p className="text-xs text-zinc-650 font-medium">Nenhum alimento registrado no {cat.label}.</p>
+          {/* Right Column: Categorized Meals Feed (2/3 width on desktop) */}
+          <div className="space-y-4 md:col-span-2">
+            {/* 2. Categorized Meals Feed */}
+            {categories.map((cat) => {
+              const CatIcon = cat.icon;
+              const catMeals = groupedMeals(cat.key);
+              const catCals = categoryCalories(cat.key);
+
+              return (
+                <div key={cat.key} className="space-y-2">
+                  {/* Category Header */}
+                  <div className="flex items-center justify-between px-1">
+                    <div className="flex items-center space-x-2">
+                      <CatIcon className={`h-4 w-4 ${cat.color}`} />
+                      <h2 className="text-sm font-bold text-zinc-200">{cat.label}</h2>
                     </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                    <span className="text-xs font-bold text-zinc-500 bg-zinc-900 border border-zinc-850 px-2.5 py-0.5 rounded-full">
+                      {catCals} kcal
+                    </span>
+                  </div>
 
+                  {/* Meals List */}
+                  <div className="space-y-2">
+                    {catMeals.length > 0 ? (
+                      catMeals.map((meal) => (
+                        <Card key={meal.id} className="border-zinc-800 bg-zinc-900/20 backdrop-blur-sm group hover:border-zinc-700 transition-all duration-300">
+                          <CardContent className="p-3 flex items-center justify-between">
+                            <div className="space-y-1">
+                              <p className="text-sm font-semibold text-zinc-100">{meal.name}</p>
+                              <p className="text-[10px] text-zinc-500 font-medium">
+                                C: {meal.carbs}g · P: {meal.protein}g · G: {meal.fat}g
+                              </p>
+                            </div>
+
+                            <div className="flex items-center space-x-3.5">
+                              <span className="text-sm font-black text-white">{meal.calories} kcal</span>
+                              
+                              <button
+                                onClick={() => handleDeleteMeal(meal.id)}
+                                disabled={deletingId === meal.id}
+                                className="text-zinc-600 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-all duration-200"
+                                title="Remover alimento"
+                              >
+                                {deletingId === meal.id ? (
+                                  <Loader2 className="h-4 w-4 animate-spin text-red-400" />
+                                ) : (
+                                  <Trash2 className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))
+                    ) : (
+                      <div className="text-center py-6 border border-dashed border-zinc-850 bg-zinc-950/10 rounded-2xl">
+                        <p className="text-xs text-zinc-650 font-medium">Nenhum alimento registrado no {cat.label}.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </MobileShell>
   );

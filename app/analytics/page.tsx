@@ -140,32 +140,90 @@ export default function AnalyticsPage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-xl font-black text-white tracking-tight">Análise de Desempenho</h1>
-            <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider mt-0.5">Gráficos de evolução</p>
           </div>
         </div>
 
-        {/* ======================================================== */}
-        {/* 1. WEIGHT EVOLUTION CHART */}
-        {/* ======================================================== */}
-        <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-bold text-zinc-200 flex items-center">
-              <TrendingDown className="h-4.5 w-4.5 text-purple-400 mr-2" />
-              Evolução de Peso (kg)
-            </CardTitle>
-            <CardDescription className="text-zinc-500 text-[11px]">
-              Variação histórica dos seus últimos 10 registros.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-2">
-            {weightChartData.length > 1 ? (
+        {/* Responsive Grid for Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6">
+          
+          {/* ======================================================== */}
+          {/* 1. WEIGHT EVOLUTION CHART */}
+          {/* ======================================================== */}
+          <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-bold text-zinc-200 flex items-center">
+                <TrendingDown className="h-4.5 w-4.5 text-purple-400 mr-2" />
+                Evolução de Peso (kg)
+              </CardTitle>
+              <CardDescription className="text-zinc-500 text-[11px]">
+                Variação histórica dos seus últimos 10 registros.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-2">
+              {weightChartData.length > 1 ? (
+                <div className="h-48 w-full pr-4 text-xs font-medium">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={weightChartData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#27272a/30" />
+                      <XAxis 
+                        dataKey="date" 
+                        stroke="#71717a" 
+                        tickLine={false} 
+                        axisLine={false} 
+                        dy={10} 
+                      />
+                      <YAxis 
+                        stroke="#71717a" 
+                        tickLine={false} 
+                        axisLine={false} 
+                        domain={['dataMin - 1', 'dataMax + 1']} 
+                      />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '12px' }}
+                        labelStyle={{ color: '#a1a1aa', fontWeight: 'bold' }}
+                        itemStyle={{ color: '#e4e4e7' }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="peso" 
+                        stroke="#c084fc" 
+                        strokeWidth={3} 
+                        activeDot={{ r: 6 }} 
+                        dot={{ r: 3, fill: '#c084fc' }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <div className="text-center py-10 border border-dashed border-zinc-850 bg-zinc-950/10 rounded-2xl">
+                  <p className="text-xs text-zinc-650 font-medium px-4">
+                    Registre pelo menos 2 pesagens no histórico para gerar o gráfico de evolução.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* ======================================================== */}
+          {/* 2. WEEKLY CALORIES CHART */}
+          {/* ======================================================== */}
+          <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-bold text-zinc-200 flex items-center">
+                <BarChart3 className="h-4.5 w-4.5 text-orange-400 mr-2" />
+                Calorias nos Últimos 7 Dias
+              </CardTitle>
+              <CardDescription className="text-zinc-500 text-[11px]">
+                Comparativo de ingestão diária vs meta estabelecida.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-2">
               <div className="h-48 w-full pr-4 text-xs font-medium">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={weightChartData}>
+                  <BarChart data={calorieChartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#27272a/30" />
                     <XAxis 
-                      dataKey="date" 
+                      dataKey="name" 
                       stroke="#71717a" 
                       tickLine={false} 
                       axisLine={false} 
@@ -175,85 +233,30 @@ export default function AnalyticsPage() {
                       stroke="#71717a" 
                       tickLine={false} 
                       axisLine={false} 
-                      domain={['dataMin - 1', 'dataMax + 1']} 
                     />
                     <Tooltip 
                       contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '12px' }}
                       labelStyle={{ color: '#a1a1aa', fontWeight: 'bold' }}
                       itemStyle={{ color: '#e4e4e7' }}
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="peso" 
-                      stroke="#c084fc" 
-                      strokeWidth={3} 
-                      activeDot={{ r: 6 }} 
-                      dot={{ r: 3, fill: '#c084fc' }}
+                    <ReferenceLine 
+                      y={calorieTarget} 
+                      stroke="#ef4444" 
+                      strokeDasharray="4 4" 
+                      label={{ value: 'Meta', fill: '#f87171', fontSize: 10, position: 'insideTopRight', fontWeight: 'bold' }} 
                     />
-                  </LineChart>
+                    <Bar 
+                      dataKey="Calorias" 
+                      fill="#f97316" 
+                      radius={[6, 6, 0, 0]} 
+                    />
+                  </BarChart>
                 </ResponsiveContainer>
               </div>
-            ) : (
-              <div className="text-center py-10 border border-dashed border-zinc-850 bg-zinc-950/10 rounded-2xl">
-                <p className="text-xs text-zinc-600 font-medium px-4">
-                  Registre pelo menos 2 pesagens no histórico para gerar o gráfico de evolução.
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
-        {/* ======================================================== */}
-        {/* 2. WEEKLY CALORIES CHART */}
-        {/* ======================================================== */}
-        <Card className="border-zinc-800 bg-zinc-900/40 backdrop-blur-xl">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-bold text-zinc-200 flex items-center">
-              <BarChart3 className="h-4.5 w-4.5 text-orange-400 mr-2" />
-              Calorias nos Últimos 7 Dias
-            </CardTitle>
-            <CardDescription className="text-zinc-500 text-[11px]">
-              Comparativo de ingestão diária vs meta estabelecida.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pt-2">
-            <div className="h-48 w-full pr-4 text-xs font-medium">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={calorieChartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a/30" />
-                  <XAxis 
-                    dataKey="name" 
-                    stroke="#71717a" 
-                    tickLine={false} 
-                    axisLine={false} 
-                    dy={10} 
-                  />
-                  <YAxis 
-                    stroke="#71717a" 
-                    tickLine={false} 
-                    axisLine={false} 
-                  />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '12px' }}
-                    labelStyle={{ color: '#a1a1aa', fontWeight: 'bold' }}
-                    itemStyle={{ color: '#e4e4e7' }}
-                  />
-                  <ReferenceLine 
-                    y={calorieTarget} 
-                    stroke="#ef4444" 
-                    strokeDasharray="4 4" 
-                    label={{ value: 'Meta', fill: '#f87171', fontSize: 10, position: 'insideTopRight', fontWeight: 'bold' }} 
-                  />
-                  <Bar 
-                    dataKey="Calorias" 
-                    fill="#f97316" 
-                    radius={[6, 6, 0, 0]} 
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
+        </div>
 
         {/* ======================================================== */}
         {/* 3. INSIGHTS AND CONSISTENCY STATS */}
