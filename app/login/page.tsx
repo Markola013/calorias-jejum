@@ -80,6 +80,10 @@ export default function LoginPage() {
         errorMessage = 'Senha incorreta.';
       } else if (error.code === 'auth/too-many-requests') {
         errorMessage = 'Muitas tentativas malsucedidas. A conta foi bloqueada temporariamente.';
+      } else if (error.code === 'auth/api-key-not-valid' || error.message?.includes('api-key-not-valid')) {
+        errorMessage = 'Chave de API do Firebase inválida. Verifique se copiou a chave correta no seu arquivo .env.';
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = 'Falha na conexão de rede. Verifique sua internet.';
       }
       
       toast.error(errorMessage);

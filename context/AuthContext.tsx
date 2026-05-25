@@ -30,6 +30,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Helper to fetch the latest UserProfile from Firestore
   const fetchUserProfile = async (uid: string): Promise<UserProfile | null> => {
     try {
+      if (!db) {
+        console.warn('Firestore database is not initialized.');
+        return null;
+      }
       const userDocRef = doc(db, 'users', uid);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
@@ -51,6 +55,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = async () => {
+    if (!auth) {
+      console.warn('Auth is not initialized.');
+      return;
+    }
     setLoading(true);
     try {
       await signOut(auth);
@@ -64,6 +72,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {

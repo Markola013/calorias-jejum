@@ -79,6 +79,10 @@ export default function SignupPage() {
         errorMessage = 'O cadastro por e-mail e senha está desabilitado.';
       } else if (error.code === 'auth/weak-password') {
         errorMessage = 'A senha digitada é muito fraca.';
+      } else if (error.code === 'auth/api-key-not-valid' || error.message?.includes('api-key-not-valid')) {
+        errorMessage = 'Chave de API do Firebase inválida. Verifique se copiou a chave correta no seu arquivo .env.';
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = 'Falha na conexão de rede. Verifique sua internet.';
       }
       
       toast.error(errorMessage);

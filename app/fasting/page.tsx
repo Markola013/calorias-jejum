@@ -301,7 +301,7 @@ export default function FastingPage() {
               <div>
                 <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Início</p>
                 <p className="font-semibold text-zinc-200 mt-0.5">
-                  {format(new Date(activeFast.startTime), "HH:mm '(eee)'", { locale: ptBR })}
+                  {format(new Date(activeFast.startTime), "HH:mm (eee)", { locale: ptBR })}
                 </p>
               </div>
               <div className="border-l border-zinc-850/60">
@@ -309,7 +309,7 @@ export default function FastingPage() {
                 <p className="font-semibold text-zinc-200 mt-0.5">
                   {format(
                     new Date(new Date(activeFast.startTime).getTime() + activeFastingTargetHours * 3600000),
-                    "HH:mm '(eee)'",
+                    "HH:mm (eee)",
                     { locale: ptBR }
                   )}
                 </p>

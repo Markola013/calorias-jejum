@@ -12,9 +12,15 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Safe initialization of Firebase for Next.js App Router (handles hot-reloading)
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// Check if the API key is present before initializing Firebase
+const isConfigValid = typeof window !== 'undefined' || !!firebaseConfig.apiKey;
+
+// Safe initialization of Firebase for Next.js App Router (handles hot-reloading and build time missing env variables)
+const app = isConfigValid 
+  ? (getApps().length > 0 ? getApp() : initializeApp(firebaseConfig))
+  : null;
+
+const auth = app ? getAuth(app) : null as any;
+const db = app ? getFirestore(app) : null as any;
 
 export { app, auth, db };

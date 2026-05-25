@@ -119,31 +119,6 @@ export default function MobileShell({ children }: MobileShellProps) {
 
         {/* Sidebar Footer Controls */}
         <div className="p-4 border-t border-zinc-800/30 space-y-2">
-          {/* Theme Toggler */}
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-zinc-900/30 hover:bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 transition-all duration-200 text-xs font-bold"
-          >
-            <div className="flex items-center space-x-2.5">
-              {!mounted ? (
-                <div className="h-4 w-4" />
-              ) : theme === 'dark' ? (
-                <>
-                  <Sun className="h-4.5 w-4.5 text-amber-400" />
-                  <span>Modo Claro</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="h-4.5 w-4.5 text-indigo-400" />
-                  <span>Modo Escuro</span>
-                </>
-              )}
-            </div>
-            <span className="text-[9px] uppercase tracking-wider text-zinc-500 bg-zinc-950 px-1.5 py-0.5 rounded-md border border-zinc-800/30">
-              {theme === 'dark' ? 'DARK' : 'LIGHT'}
-            </span>
-          </button>
-
           {/* Logout Button */}
           <button
             onClick={handleLogout}
@@ -176,21 +151,6 @@ export default function MobileShell({ children }: MobileShellProps) {
           </div>
 
           <div className="flex items-center space-x-1.5">
-            {/* Theme Toggle */}
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-lg bg-zinc-900/60 hover:bg-zinc-850 text-zinc-400 transition-all duration-200"
-              title="Alterar Tema"
-            >
-              {!mounted ? (
-                <div className="h-4 w-4" />
-              ) : theme === 'dark' ? (
-                <Sun className="h-4 w-4 text-amber-400" />
-              ) : (
-                <Moon className="h-4 w-4 text-indigo-400" />
-              )}
-            </button>
-
             {/* Logout */}
             <button
               onClick={handleLogout}
