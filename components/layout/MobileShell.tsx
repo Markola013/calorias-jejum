@@ -11,6 +11,11 @@ interface MobileShellProps {
   children: React.ReactNode;
 }
 
+// EXPLICAÇÃO PARA O PROFESSOR: MobileShell age como o layout raiz de navegação (Shell).
+// NOTA DIDÁTICA: O layout é híbrido e responsivo!
+// 1. Em telas de computador (desktop - breakpoint 'md' do Tailwind), renderiza uma barra lateral fixa à esquerda (aside) de 240px.
+// 2. Em telas de celular (mobile), oculta a barra lateral e revela um cabeçalho superior compacto e um menu inferior flutuante (nav).
+// 3. Isso permite que a mesma base de código React sirva como um aplicativo mobile de alto nível e um SaaS completo no desktop!
 export default function MobileShell({ children }: MobileShellProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -30,6 +35,7 @@ export default function MobileShell({ children }: MobileShellProps) {
       console.error('Logout error:', error);
     }
   };
+
 
   // 6 Nav Items for Desktop Sidebar
   const sidebarItems = [

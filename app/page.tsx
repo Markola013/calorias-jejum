@@ -136,19 +136,24 @@ export default function DashboardPage() {
     );
   }
 
-  // Fallbacks if profile isn't fully loaded yet to prevent runtime errors
+  // EXPLICAÇÃO PARA O PROFESSOR: Valores de metas calóricas e hídricas calculados a partir
+  // da equação de Mifflin-St Jeor na etapa de Onboarding. Se o perfil ainda estiver carregando,
+  // aplicamos fallbacks preventivos para evitar erros de renderização (Runtime Errors).
   const calorieTarget = userProfile?.dailyCalorieTarget || 2000;
   const waterTarget = userProfile?.dailyWaterTarget || 2000;
   const currentWeight = latestWeight?.weightKg || userProfile?.weight || 70;
   const targetWeight = userProfile?.targetWeight || 65;
 
-  // Macros targets calculation (defaults to 40/30/30)
+  // EXPLICAÇÃO PARA O PROFESSOR: Cálculo de gramas de macronutrientes com base na proporção selecionada (ex: 40/30/30).
+  // NOTA DIDÁTICA: 1g de carboidrato = 4 kcal | 1g de proteína = 4 kcal | 1g de gordura = 9 kcal.
+  // Multiplicamos a meta calórica total pelo percentual da proporção e dividimos pelas kcal por grama de cada nutriente.
   const macroRatios = userProfile?.macrosRatio || { carbs: 40, protein: 30, fat: 30 };
   const targetCarbs = Math.round((calorieTarget * (macroRatios.carbs / 100)) / 4);
   const targetProtein = Math.round((calorieTarget * (macroRatios.protein / 100)) / 4);
   const targetFat = Math.round((calorieTarget * (macroRatios.fat / 100)) / 9);
 
-  // Aggregated Consumed Data
+  // EXPLICAÇÃO PARA O PROFESSOR: Agregação em tempo real. Fazemos um sumário (reduce) de todos os
+  // registros recuperados do banco Firestore para o dia de hoje, somando calorias, macros e água consumida.
   const consumedCalories = meals.reduce((sum, m) => sum + m.calories, 0);
   const consumedCarbs = meals.reduce((sum, m) => sum + m.carbs, 0);
   const consumedProtein = meals.reduce((sum, m) => sum + m.protein, 0);
@@ -158,10 +163,17 @@ export default function DashboardPage() {
   const remainingCalories = calorieTarget - consumedCalories;
   const caloriePercentage = Math.min(100, Math.round((consumedCalories / calorieTarget) * 100));
 
-  // Circular SVG ring math: Radius 52, Circumference = 2 * PI * 52 = 326.7
-  const strokeRadius = 52;
+  // EXPLICAÇÃO PARA O PROFESSOR: Geometria analítica do anel SVG de progresso de calorias.
+  // 1. Definimos o raio do círculo como 70.
+  // 2. Calculamos a circunferência da borda: 2 * PI * Raio = 439.8px.
+  // 3. A propriedade 'strokeDasharray' do SVG define o padrão de traços do anel (igual à circunferência).
+  // 4. A propriedade 'strokeDashoffset' define onde o traço começa. Para preencher o círculo de acordo
+  //    com o progresso calórico, subtraímos a proporção do progresso da circunferência total.
+  //    Isso cria a animação de preenchimento fluido e precisa que acompanha as calorias ingeridas!
+  const strokeRadius = 70;
   const strokeCircumference = 2 * Math.PI * strokeRadius;
   const strokeDashoffset = strokeCircumference - (caloriePercentage / 100) * strokeCircumference;
+
 
   return (
     <MobileShell>
@@ -209,12 +221,12 @@ export default function DashboardPage() {
                   </svg>
 
                   {/* Inside Ring Metrics */}
-                  <div className="absolute text-center flex flex-col justify-center items-center">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center select-none">
                     <Flame className="h-5 w-5 text-calorie animate-pulse mb-0.5" />
-                    <span className="text-3xl font-black text-white tracking-tighter">
+                    <span className="text-3.5xl font-black text-white tracking-tighter">
                       {consumedCalories}
                     </span>
-                    <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                    <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest mt-1">
                       kcal consumidas
                     </span>
                   </div>

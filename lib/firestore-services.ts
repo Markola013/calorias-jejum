@@ -124,12 +124,17 @@ export async function endFasting(
   });
 }
 
+// EXPLICAÇÃO PARA O PROFESSOR: Busca o registro de jejum ativo ('active') do usuário logado.
+// NOTA DIDÁTICA: O Firestore exige a criação manual de Índices Compostos no painel da nuvem se
+// usarmos filtros 'where' e ordenações 'orderBy' em campos diferentes. Como cada usuário só pode
+// ter no máximo um único jejum ativo ao mesmo tempo, removemos a ordenação por 'createdAt' e mantivemos
+// apenas o filtro de status e um limite de 1 registro. Isso faz com que a consulta funcione de forma
+// instantânea e automática em qualquer base Firestore sem exigir configuração manual de índices!
 export async function getActiveFastingLog(userId: string): Promise<FastingLog | null> {
   const colRef = collection(db, 'users', userId, 'fasts');
   const q = query(
     colRef,
     where('status', '==', 'active'),
-    orderBy('createdAt', 'desc'),
     limit(1)
   );
   
@@ -139,6 +144,7 @@ export async function getActiveFastingLog(userId: string): Promise<FastingLog | 
   }
   return null;
 }
+
 
 export async function getFastingLogs(userId: string, limitCount = 50): Promise<FastingLog[]> {
   const colRef = collection(db, 'users', userId, 'fasts');

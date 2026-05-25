@@ -308,6 +308,8 @@ export default function MealsPage() {
               </form>
             </DialogContent>
           </Dialog>
+        </div>
+
         {/* Responsive Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 items-start">
           
