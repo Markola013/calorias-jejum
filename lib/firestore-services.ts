@@ -59,8 +59,10 @@ export async function getMealLogs(userId: string, dateStr?: string): Promise<Mea
 
   if (dateStr) {
     // E.g., dateStr is "2026-05-24"
-    const startOfDay = new Date(`${dateStr}T00:00:00`).toISOString();
-    const endOfDay = new Date(`${dateStr}T23:59:59.999`).toISOString();
+    const [year, month, day] = dateStr.split('-').map(Number);
+    // Instantiate local dates securely across all browsers (including Safari/iOS)
+    const startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0).toISOString();
+    const endOfDay = new Date(year, month - 1, day, 23, 59, 59, 999).toISOString();
     q = query(
       colRef,
       where('createdAt', '>=', startOfDay),
@@ -183,8 +185,10 @@ export async function getWaterLogs(userId: string, dateStr?: string): Promise<Wa
   let q = query(colRef, orderBy('createdAt', 'desc'));
 
   if (dateStr) {
-    const startOfDay = new Date(`${dateStr}T00:00:00`).toISOString();
-    const endOfDay = new Date(`${dateStr}T23:59:59.999`).toISOString();
+    const [year, month, day] = dateStr.split('-').map(Number);
+    // Instantiate local dates securely across all browsers (including Safari/iOS)
+    const startOfDay = new Date(year, month - 1, day, 0, 0, 0, 0).toISOString();
+    const endOfDay = new Date(year, month - 1, day, 23, 59, 59, 999).toISOString();
     q = query(
       colRef,
       where('createdAt', '>=', startOfDay),
